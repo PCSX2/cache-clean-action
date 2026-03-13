@@ -1,0 +1,19 @@
+{
+	"name": "cache-clean-action",
+	"version": "1.0.0",
+	"description": "Clean Github Actions Caches",
+	"keywords": [],
+	"exports": { ".": "./dist/index.js" },
+	"author": "TellowKrinkle",
+	"license": "ISC",
+	"type": "module",
+	"dependencies": {
+		"@actions/core": "^3.0.0",
+		"@actions/github": "^9.0.0"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^29.0.2",
+		"@rollup/plugin-node-resolve": "^16.0.3",
+		"rollup": "^4.59.0"
+	}
+}

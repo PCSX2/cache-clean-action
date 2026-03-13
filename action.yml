@@ -1,0 +1,18 @@
+name: Cache Cleanup
+description: Delete old caches
+inputs:
+  items:
+    description: |
+      JSON of [{key: string, count: int}].
+      For each entry, all cache entries are searched for the key and grouped by the content before the key.
+      For each group, the count most recently accessed are kept and the rest discarded.
+    type: string
+    required: true
+  token:
+    description: GitHub API Token
+    type: string
+    required: true
+runs:
+  using: node24
+  main: src/nop.js
+  post: dist/index.js

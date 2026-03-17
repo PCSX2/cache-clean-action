@@ -12,6 +12,10 @@ inputs:
     description: GitHub API Token
     type: string
     required: true
+  branch:
+    description: Branch filter (current|all)
+    type: string
+    default: current
   on_failure:
     description: What to do if the action fails (warn|error)
     type: string

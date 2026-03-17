@@ -6,8 +6,10 @@ try {
 	/** @type {{key: string, count: number}[]} */
 	const config = JSON.parse(core.getInput("items", {required: true}));
 	const token = core.getInput("token", {required: true})
+	const refMode = core.getInput("branch") || "current";
+	const ref = refMode === "all" ? "" : github.context.ref;
 	const octokit = github.getOctokit(token);
-	/** @returns {Promise<{id: number, key: string, last_accessed_at: string}[]>} */
+	/** @returns {Promise<{id: number, key: string, ref: string, last_accessed_at: string}[]>} */
 	async function getAllCaches() {
 		let result = [];
 		let caches;
@@ -15,7 +17,7 @@ try {
 		do {
 			caches = await octokit.rest.actions.getActionsCacheList({
 				...github.context.repo,
-				ref: github.context.ref,
+				ref: ref,
 				page: page,
 				per_page: 100,
 				sort: "last_accessed_at",
@@ -27,7 +29,7 @@ try {
 		return result;
 	}
 
-	/** 
+	/**
 	 * @param {string} str
 	 * @returns {{key: string, value: string, count: number}?}
 	 */
@@ -51,10 +53,11 @@ try {
 		const match = findMatch(cache.key);
 		if (match === null)
 			continue;
-		const count = counts.get(match.key) || 0;
-		counts.set(match.key, count + 1);
+		const key = cache.ref + " | " + match.key;
+		const count = counts.get(key) || 0;
+		counts.set(key, count + 1);
 		const shouldDelete = count >= match.count;
-		console.log(`${shouldDelete ? "DEL " : "KEEP"} ${cache.id} @ ${cache.last_accessed_at}: ${match.key}[${count}]${match.value}`);
+		console.log(`${shouldDelete ? "DEL " : "KEEP"} ${cache.id} @ ${cache.last_accessed_at} on ${cache.ref}: ${match.key}[${count}]${match.value}`);
 		if (shouldDelete) {
 			await octokit.rest.actions.deleteActionsCacheById({...github.context.repo, cache_id: cache.id});
 		}

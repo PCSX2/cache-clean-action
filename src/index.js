@@ -59,5 +59,5 @@ try {
 		}
 	}
 } catch (error) {
-	core.setFailed(error.message);
+	core.warning("Failed to clean caches: " + error.message);
 }

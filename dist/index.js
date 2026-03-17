@@ -28059,25 +28059,13 @@ function getInput(name, options) {
     }
     return val.trim();
 }
-//-----------------------------------------------------------------------
-// Results
-//-----------------------------------------------------------------------
 /**
- * Sets the action status to failed.
- * When the action exits it will be with an exit code of 1
- * @param message add error issue message
- */
-function setFailed(message) {
-    process.exitCode = ExitCode.Failure;
-    error(message);
-}
-/**
- * Adds an error issue
- * @param message error issue message. Errors will be converted to string via toString()
+ * Adds a warning issue
+ * @param message warning issue message. Errors will be converted to string via toString()
  * @param properties optional properties to add to the annotation.
  */
-function error(message, properties = {}) {
-    issueCommand('error', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+function warning(message, properties = {}) {
+    issueCommand('warning', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 
 class Context {
@@ -33008,6 +32996,6 @@ try {
 		}
 	}
 } catch (error) {
-	setFailed(error.message);
+	warning("Failed to clean caches: " + error.message);
 }
 //# sourceMappingURL=index.js.map

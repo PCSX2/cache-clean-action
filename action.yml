@@ -12,6 +12,10 @@ inputs:
     description: GitHub API Token
     type: string
     required: true
+  on_failure:
+    description: What to do if the action fails (warn|error)
+    type: string
+    default: warn
 runs:
   using: node24
   main: src/nop.js

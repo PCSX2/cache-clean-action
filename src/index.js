@@ -1,6 +1,7 @@
 import * as core from "@actions/core"
 import * as github from "@actions/github"
 
+const failAction = core.getInput("on_failure") || "warn";
 try {
 	/** @type {{key: string, count: number}[]} */
 	const config = JSON.parse(core.getInput("items", {required: true}));
@@ -59,5 +60,8 @@ try {
 		}
 	}
 } catch (error) {
-	core.warning("Failed to clean caches: " + error.message);
+	if (failAction === "error")
+		core.setFailed(error.message);
+	else
+		core.warning("Failed to clean caches: " + error.message);
 }
